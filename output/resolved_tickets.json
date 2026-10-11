@@ -1,0 +1,49 @@
+{
+  "database": "data/campus_customs_new.db",
+  "starting_checking_balance": 3400.0,
+  "ending_checking_balance": 3400.0,
+  "cash_changes": [
+    {"ticket_id": 101, "amount": 0.0, "reason": "No payment or purchase was authorized; size-S stock was zero."},
+    {"ticket_id": 102, "amount": 0.0, "reason": "Rent was upcoming, not overdue; no payment was requested or approved."},
+    {"ticket_id": 103, "amount": 0.0, "reason": "No purchase or discount payment was authorized; stock was short by 12 hoodies."}
+  ],
+  "tickets": [
+    {
+      "id": 101,
+      "final_status": "resolved",
+      "run_id": "d591c77d-2694-4a76-8921-2611271013ac",
+      "outcome": "The Classic Bulldog Tee in size S was unavailable: 0 in stock versus 1 requested. Customer Service prepared a polite draft explaining the shortage and human review requirement.",
+      "agents": [
+        {"role": "inventory", "contribution": "Checked CC-TEE-WHITE size S and found quantity 0 at Aisle B; identified invoice 501 as an unpaid replenishment blocker.", "tools": ["get_ticket_context", "check_customer_order_inventory"]},
+        {"role": "customer_service", "contribution": "Prepared a customer-facing draft stating the item is unavailable without promising a restock date or alternative.", "tools": ["get_ticket_context", "check_customer_order_inventory"]}
+      ],
+      "human_approvals": [],
+      "financial_change": 0.0
+    },
+    {
+      "id": 102,
+      "final_status": "resolved",
+      "run_id": "e760198c-1be4-41c9-b799-6dc4a89dcd7d",
+      "outcome": "Facilities and Accounting verified that the $2,400 Chapel Street rent is due 2026-09-02 and is not overdue on shop date 2026-08-31. No payment was made.",
+      "agents": [
+        {"role": "facilities", "contribution": "Checked lease 1 against desk.date_today and determined the rent notice is upcoming, not overdue.", "tools": ["get_ticket_context", "get_rent_obligation_status"]},
+        {"role": "accounting", "contribution": "Verified the $2,400 obligation and $3,400 checking balance, and confirmed that payment would require explicit human approval.", "tools": ["get_ticket_context", "get_rent_obligation_status"]}
+      ],
+      "human_approvals": [],
+      "financial_change": 0.0
+    },
+    {
+      "id": 103,
+      "final_status": "resolved",
+      "run_id": "7f53ff2c-56d2-4a86-a847-2b9cebc8eb46",
+      "outcome": "The request for 20 medium CC-HOOD-NAVY hoodies could not be fulfilled from current stock: 8 were available, 12 short. Pricing was $22 unit cost and $58 list price; no discount was authorized.",
+      "agents": [
+        {"role": "inventory", "contribution": "Verified size-M quantity 8 at Aisle A against the requested 20 and identified the 12-unit shortage.", "tools": ["get_ticket_context", "evaluate_bulk_price_and_stock"]},
+        {"role": "accounting", "contribution": "Reviewed $22 unit cost and $58 list price and confirmed this was not a payment obligation.", "tools": ["get_ticket_context", "evaluate_bulk_price_and_stock"]},
+        {"role": "customer_service", "contribution": "Prepared a polite draft explaining the 8 available units and that no bulk discount was confirmed.", "tools": ["get_ticket_context", "evaluate_bulk_price_and_stock"]}
+      ],
+      "human_approvals": [],
+      "financial_change": 0.0
+    }
+  ]
+}

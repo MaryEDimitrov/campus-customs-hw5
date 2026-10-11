@@ -1,0 +1,70 @@
+{
+  "database": "data/campus_customs_new.db",
+  "server": "campus-customs-hw5",
+  "tests": [
+    {
+      "prompt": "Check whether ticket 101 can be fulfilled: do we have 1 CC-TEE-WHITE in size S?",
+      "tool_name": "check_customer_order_inventory",
+      "arguments": {
+        "sku": "CC-TEE-WHITE",
+        "size": "S",
+        "requested_qty": 1
+      },
+      "tool_output": {
+        "sku": "CC-TEE-WHITE",
+        "name": "Classic Bulldog Tee",
+        "size": "S",
+        "qty": 0,
+        "location": "Aisle B",
+        "requested_qty": 1,
+        "found": true,
+        "available": false
+      }
+    },
+    {
+      "prompt": "For ticket 102, check lease 1 against the shop's authoritative date and tell me whether the rent is overdue.",
+      "tool_name": "get_rent_obligation_status",
+      "arguments": {
+        "lease_id": 1
+      },
+      "tool_output": {
+        "lease_id": 1,
+        "space_name": "Chapel Street shop",
+        "landlord": "Elm City Properties",
+        "monthly_rent": 2400.0,
+        "next_due": "2026-09-02",
+        "notes": null,
+        "date_today": "2026-08-31",
+        "found": true,
+        "overdue": false
+      }
+    },
+    {
+      "prompt": "For ticket 103, evaluate 20 CC-HOOD-NAVY hoodies in size M using the database pricing and inventory.",
+      "tool_name": "evaluate_bulk_price_and_stock",
+      "arguments": {
+        "sku": "CC-HOOD-NAVY",
+        "size": "M",
+        "requested_qty": 20
+      },
+      "tool_output": {
+        "sku": "CC-HOOD-NAVY",
+        "size": "M",
+        "requested_qty": 20,
+        "pricing": {
+          "sku": "CC-HOOD-NAVY",
+          "unit_cost": 22.0,
+          "list_price": 58.0
+        },
+        "inventory": {
+          "sku": "CC-HOOD-NAVY",
+          "name": "Basic Hoodie Big Yale",
+          "size": "M",
+          "qty": 8,
+          "location": "Aisle A"
+        },
+        "enough_stock": false
+      }
+    }
+  ]
+}

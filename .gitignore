@@ -1,0 +1,19 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Python local environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Frontend dependencies and generated build cache
+frontend/node_modules/
+frontend/.vite/
+
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/
