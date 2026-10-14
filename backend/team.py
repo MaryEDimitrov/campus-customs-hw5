@@ -85,6 +85,10 @@ async def run_team(ticket_ids: list[int]) -> TeamRunResult:
         boss_result = await agents["boss"].run(f"Synthesize these specialist findings into a safe plan. Do not take action; require human approval for payments. Findings: {summary}")
         final_plan = boss_result.output.recommendation
         append_audit_event(run_id, step + 1, "boss", "synthesis_result", recommendation=final_plan[:500])
-        append_audit_event(run_id, step + 2, "boss", "run_end", finding_count=len(findings), human_approval_required=True)
-        return TeamRunResult(run_id=run_id, ticket_ids=ticket_ids, findings=findings, delegations=delegations, final_plan=final_plan, human_approval_required=True)
+        # Human approval gates money movement and financial decisions such as
+        # applying a bulk discount. Ticket 103 therefore stays in progress;
+        # the agents may analyze it, but cannot approve the discount.
+        human_approval_required = any(ticket_id == 103 for ticket_id in ticket_ids)
+        append_audit_event(run_id, step + 2, "boss", "run_end", finding_count=len(findings), human_approval_required=human_approval_required)
+        return TeamRunResult(run_id=run_id, ticket_ids=ticket_ids, findings=findings, delegations=delegations, final_plan=final_plan, human_approval_required=human_approval_required)
 

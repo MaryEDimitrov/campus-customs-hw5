@@ -99,7 +99,7 @@ The workspace-level `.mcp.json` now registers `campus-customs-hw5` with the abso
 
 The database SHA-256 hashes remained identical before and after testing, confirming that the MCP calls did not write to either database.
 
-## Problem 8 — Full-run evidence
+## Problem 9 — Full-run evidence
 
 The working database was reset from the untouched seed before the full run. The three successful runs used the streamlined plans below; earlier failed or exploratory audit events remain in the append-only audit file.
 
@@ -123,7 +123,7 @@ The working database was reset from the untouched seed before the full run. The 
 
 No human approvals occurred, the `payments` table is empty, and no balance-changing route was called. The cash equation is `$3,400.00 + $0.00 - $0.00 = $3,400.00`.
 
-## Problem 8 — Submission artifact map
+## Problem 9 — Submission artifact map
 
 - `output/desk_tickets.html` — comparison board with Expected, Actual, Cash, and Reflection tabs.
 - `output/resolved_board.html` — double-clickable resolved board evidence for tickets 101–103.
@@ -131,6 +131,12 @@ No human approvals occurred, the `payments` table is empty, and no balance-chang
 - `output/audit_trail.json` — append-only agent-loop events, including the three successful run IDs.
 
 ## Problem 10 — Reflection draft
+
+### Reflection on the implementation saga
+
+The dashboard work showed why agent systems need explicit authority boundaries. Early behavior marked tickets resolved too soon, and the original prompt set treated every payment as requiring human approval even though the intended policy allowed funded, in-scope payments to proceed automatically. During review we corrected the prompts, added database approval metadata, and separated operational resolution from financial actions.
+
+Testing also uncovered duplicate payments, an invoice status that did not change after payment, a concurrent balance-update race, raw tool-call arrays in the UI, and a payment control shown for unrelated tickets. We addressed these with duplicate guards, serialized transactions, invoice-status updates, ticket-specific controls, and human-readable activity summaries. The main lesson is that safe agent behavior depends on the whole system—prompts, typed outputs, database constraints, backend checks, audit records, and UI—not on model behavior alone.
 
 ### 1. How each agent performed
 

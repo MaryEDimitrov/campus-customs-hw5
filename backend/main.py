@@ -22,7 +22,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 MCP_SERVER = ROOT / "mcp_server" / "mcp_server.py"
 app = FastAPI(title="Campus Customs Agent Desk")
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 class PaymentApproval(BaseModel):
     kind: str = Field(min_length=1)
@@ -51,7 +51,8 @@ async def tickets() -> list[dict]:
         if not context.get("found"):
             raise HTTPException(404, f"Ticket {ticket_id} was not found")
         ticket = context["ticket"]
-        result.append({"id": ticket["id"], "subject": ticket["subject"], "type": ticket["type"], "status": ticket["status"], "requester": ticket["requester"], "notes": ticket["notes"]})
+        invoice = context.get("invoice") or {}
+        result.append({"id": ticket["id"], "subject": ticket["subject"], "type": ticket["type"], "status": ticket["status"], "requester": ticket["requester"], "notes": ticket["notes"], "requires_human_approval": bool(ticket.get("requires_human_approval", 0)), "approval_reason": ticket.get("approval_reason"), "payment_status": invoice.get("status")})
     return result
 
 @app.post("/api/tickets/{ticket_id}/run")

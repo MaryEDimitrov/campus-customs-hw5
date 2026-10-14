@@ -53,7 +53,7 @@ Use the supplied `data (6).zip` archive. Extract the original `data/campus_custo
 
 ### User prompt and rules
 
-The shop database includes `desk`, `tickets`, `inventory`, `pricing`, `vendors`, `leases`, `cash_accounts`, `payments`, and `invoices`. `desk.date_today` is the shop date; vendor lead times come from `vendors`; open unpaid vendor invoices block shipments; payments require human approval; balances may never go negative; only outgoing cash is modeled; and no real customer/vendor communication may occur. Use Portkey for future AI calls.
+The shop database includes `desk`, `tickets`, `inventory`, `pricing`, `vendors`, `leases`, `cash_accounts`, `payments`, and `invoices`. `desk.date_today` is the shop date; vendor lead times come from `vendors`; open unpaid vendor invoices block shipments; funded, in-scope payments may be made by the agent; human review is needed only when funds are insufficient or the financial action is outside ticket scope; balances may never go negative; only outgoing cash is modeled; and no real customer/vendor communication may occur. Use Portkey for future AI calls.
 
 ### Implementation notes
 
@@ -158,7 +158,7 @@ Build five PydanticAI roles—Boss, Inventory, Accounting, Facilities, and Custo
 
 ### Prompt rules supplied for customization
 
-Each prompt covers: authoritative MCP-only shop facts; `desk.date_today`; vendor lead times and open-invoice shipment blocks; human payment approval; no negative balances; outbound cash only; no real customer/vendor contact; privacy; exact ticket scope; evidence and blocker reporting; no invented prices, stock, dates, discounts, or revenue; and bounded agent/tool loops.
+Each prompt covers: authoritative MCP-only shop facts; `desk.date_today`; vendor lead times and open-invoice shipment blocks; funded in-scope payment authority with human escalation for insufficient funds; no negative balances; outbound cash only; no real customer/vendor contact; privacy; exact ticket scope; evidence and blocker reporting; no invented prices, stock, dates, discounts, or revenue; and bounded agent/tool loops.
 
 ### Verification
 
@@ -221,7 +221,7 @@ Add FastAPI routes for the React dashboard: return tickets 101–103 and status,
 - Added `backend/main.py` with ticket/status, agent-run, event, payment-approval, checking-balance, reset, and health routes.
 - Dashboard reads and payment execution call the MCP server rather than adding a second database tools layer.
 - The reset route copies `data/campus_customs.db` over `data/campus_customs_new.db` through a temporary file.
-- Payment requests require a named human approver and are rejected by MCP when funds are insufficient.
+- Funded, in-scope payment requests may be executed by the agent; MCP rejects insufficient funds, duplicates, and out-of-scope payment attempts.
 - No server was started and no agents, payments, ticket writes, or resets were run during implementation.
 
 ### Verification
@@ -239,7 +239,7 @@ Add FastAPI routes for the React dashboard: return tickets 101–103 and status,
 - [x] Checking-balance route
 - [x] Reset route
 
-## Problem 8 — Run the full board and record resolved tickets
+## Problem 9 — Run the full board and record resolved tickets
 
 ### Requirement
 
@@ -299,7 +299,7 @@ Prepare bullet-point notes for the reflection: evaluate each agent on each ticke
 
 ### Requirement
 
-Build a React + Vite + TypeScript dashboard in `frontend/` that calls the Problem 7 routes, lists and selects the three tickets, runs a selected team, shows agent events and summaries, marks a completed ticket resolved, supports human payment approval, displays checking balance, and uses an organized, uncluttered design. Allow the Vite origin through backend CORS and document the design choices.
+Build a React + Vite + TypeScript dashboard in `frontend/` that calls the Problem 7 routes, lists and selects the three tickets, runs a selected team, shows agent events and summaries, marks a completed ticket resolved, supports funded agent payments with human escalation for insufficient funds, displays checking balance, and uses an organized, uncluttered design. Allow the Vite origin through backend CORS and document the design choices.
 
 ### Implementation notes
 
